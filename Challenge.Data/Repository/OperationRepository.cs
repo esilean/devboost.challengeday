@@ -4,7 +4,6 @@ using Challenge.Domain.Dto;
 using Challenge.Domain.Interfaces;
 using Challenge.Shared.Enum;
 using MongoDB.Driver;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,28 +12,19 @@ namespace Challenge.Data.Repository
     public class OperationRepository : IOperationRepository
     {
 
-        private readonly MongoDbContext _dbContext;
-        public OperationRepository(MongoDbContext dbContext)
+        private readonly MongoDbContext _context;
+        public OperationRepository(MongoDbContext context)
         {
-            _dbContext = dbContext;
+            _context = context;
         }
-        public async Task<Operation> Add(Operation operation)
+        public async Task Add(Operation operation)
         {
-            try
-            {
-
-                await _dbContext.Operation.InsertOneAsync(operation);
-                return operation;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _context.Operation.InsertOneAsync(operation);
         }
 
         public async Task<ContaCorrenteDto> List()
         {
-            var allOperations = await _dbContext.Operation.FindAsync(Builders<Operation>.Filter.Empty);
+            var allOperations = await _context.Operation.FindAsync(Builders<Operation>.Filter.Empty);
 
             var totalDepositos = allOperations.ToList().Where(o => o.OperationType == OperationType.Deposito).Sum(d => d.Value);
             var totalSaque = allOperations.ToList().Where(o => o.OperationType == OperationType.Saque).Sum(d => d.Value);

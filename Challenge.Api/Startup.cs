@@ -1,3 +1,4 @@
+using Challenge.Api.Middleware;
 using Challenge.Application.Operations;
 using Challenge.Application.Operations.Interfaces;
 using Challenge.Data.DbContext;
@@ -20,7 +21,6 @@ namespace Challenge
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -33,12 +33,12 @@ namespace Challenge
             services.Configure<DbConfig>(Configuration.GetSection("MongoDb"));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ErrorHandlerMiddleware>();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
             }
 
             app.UseHttpsRedirection();

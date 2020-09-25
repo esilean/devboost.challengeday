@@ -5,7 +5,7 @@ namespace Challenge.Domain.Interfaces
 {
     public interface IOperationRepository
     {
-        Task<Operation> Add(Operation operation);
+        Task Add(Operation operation);
         Task<ContaCorrenteDto> List();
     }
 }
