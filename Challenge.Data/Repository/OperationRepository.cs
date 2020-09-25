@@ -4,6 +4,7 @@ using Challenge.Domain.Dto;
 using Challenge.Domain.Interfaces;
 using Challenge.Shared.Enum;
 using MongoDB.Driver;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,8 +20,16 @@ namespace Challenge.Data.Repository
         }
         public async Task<Operation> Add(Operation operation)
         {
-            await _dbContext.Operation.InsertOneAsync(operation);
-            return operation;
+            try
+            {
+
+                await _dbContext.Operation.InsertOneAsync(operation);
+                return operation;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<ContaCorrenteDto> List()
