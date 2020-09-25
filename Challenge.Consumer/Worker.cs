@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using Challenge.Shared;
-using Challenge.Shared.Enum;
 using KafkaNet;
 using KafkaNet.Model;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Challenge.Consumer.Kafka
 {
@@ -27,7 +22,7 @@ namespace Challenge.Consumer.Kafka
         public Worker(ILogger<Worker> logger)
         {
             _logger = logger;
-            _kafkaOptions = new KafkaOptions(new Uri("http://omv.serveblog.net:29092"));
+            _kafkaOptions = new KafkaOptions(new Uri("http://localhost:9092"));
             _brokerRouter = new BrokerRouter(_kafkaOptions);
             _consumer = new KafkaNet.Consumer(new ConsumerOptions("operation-created-event", _brokerRouter));
         }
@@ -70,7 +65,7 @@ namespace Challenge.Consumer.Kafka
         {
             foreach (var msg in _consumer.Consume())
                 using (HttpClient client = new HttpClient())
-                    await client.PostAsync("http://localhost:50648/api/operations", ConvertObjectToByteArrayContent(Encoding.UTF8.GetString(msg.Value)));
+                    await client.PostAsync("https://localhost:44332/api/operations", ConvertObjectToByteArrayContent(Encoding.UTF8.GetString(msg.Value)));
         }
     }
 }

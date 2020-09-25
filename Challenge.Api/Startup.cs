@@ -30,7 +30,7 @@ namespace Challenge
             services.AddScoped<IOperationRepository, OperationRepository>();
             services.AddScoped<MongoDbContext>();
 
-            services.Configure<DbConfig>(Configuration.GetSection("MongoDbSettings"));
+            services.Configure<DbConfig>(Configuration.GetSection("MongoDb"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

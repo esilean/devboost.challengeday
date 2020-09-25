@@ -7,7 +7,7 @@ namespace Challenge.Application.Dto
     {
         public Guid Id { get; set; }
         public double Value { get; set; }
-        public OperationType OperandType { get; set; }
+        public OperationType OperationType { get; set; }
         public DateTime Created { get; set; }
     }
 }

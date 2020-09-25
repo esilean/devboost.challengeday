@@ -17,7 +17,7 @@ namespace Challenge.Application.Operations
 
         public async Task Handle(OperationDto operationDto)
         {
-            var operation = new Operation(operationDto.Id, operationDto.Value, operationDto.OperandType, operationDto.Created);
+            var operation = new Operation(operationDto.Id, operationDto.Value, operationDto.OperationType, operationDto.Created);
             await _operationRepository.Add(operation);
         }
     }

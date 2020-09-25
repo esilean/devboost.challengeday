@@ -4,6 +4,12 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>
