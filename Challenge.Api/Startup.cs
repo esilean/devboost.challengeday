@@ -1,3 +1,4 @@
+using Challenge.Api.Documentation;
 using Challenge.Api.Middleware;
 using Challenge.Application.Operations;
 using Challenge.Application.Operations.Interfaces;
@@ -25,6 +26,8 @@ namespace Challenge
         {
             services.AddControllers();
 
+            Swagger.Configurar(services);
+
             services.AddScoped<IOperationCreate, Create>();
 
             services.AddScoped<IOperationRepository, OperationRepository>();
@@ -40,6 +43,13 @@ namespace Challenge
             {
                 //app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Banking Operation V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 

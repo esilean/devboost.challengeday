@@ -1,5 +1,6 @@
 using KafkaNet;
 using KafkaNet.Model;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,12 +20,16 @@ namespace Challenge.Consumer.Kafka
         private KafkaNet.Consumer _consumer;
 
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration)
         {
+
+            var workerOptions = new WorkerOptions();
+            configuration.Bind("Kafka", workerOptions);
+
             _logger = logger;
-            _kafkaOptions = new KafkaOptions(new Uri("http://localhost:9092"));
+            _kafkaOptions = new KafkaOptions(new Uri(workerOptions.BootstrapServers));
             _brokerRouter = new BrokerRouter(_kafkaOptions);
-            _consumer = new KafkaNet.Consumer(new ConsumerOptions("operation-created-event", _brokerRouter));
+            _consumer = new KafkaNet.Consumer(new ConsumerOptions(workerOptions.Topic, _brokerRouter));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -64,8 +69,13 @@ namespace Challenge.Consumer.Kafka
         private async Task ObterAsync()
         {
             foreach (var msg in _consumer.Consume())
+            {
                 using (HttpClient client = new HttpClient())
+                {
                     await client.PostAsync("https://localhost:44332/api/operations", ConvertObjectToByteArrayContent(Encoding.UTF8.GetString(msg.Value)));
+                }
+            }
+
         }
     }
 }
